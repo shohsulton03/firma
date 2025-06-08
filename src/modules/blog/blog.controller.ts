@@ -5,6 +5,7 @@ import { UpdateBlogDto } from './dto/update-blog.dto';
 import { IBlogService } from './interfaces/blog.service';
 import { ApiConsumes, ApiQuery } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Auth } from '../../common/decorator/auth.decorator';
 
 @Controller('blog')
 export class BlogController {
@@ -12,7 +13,7 @@ export class BlogController {
     @Inject('IBlogService') private readonly blogService: IBlogService,
   ) {}
 
-  
+  @Auth()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @Post()
@@ -40,6 +41,7 @@ export class BlogController {
     return this.blogService.findOneById(id);
   }
 
+  @Auth()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   @Patch(':id')
@@ -51,6 +53,7 @@ export class BlogController {
     return this.blogService.update(id, updateBlogDto, file);
   }
 
+  @Auth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.blogService.delete(id);

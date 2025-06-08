@@ -13,9 +13,28 @@ export class CategoryRepository implements ICategoryRepository {
       return await this.categoryRepository.save(dto)
   }
 
-  async findAll(): Promise<Array<Category>> {
-      return await this.categoryRepository.find()
-  }
+  async findAll(
+      title?: string,
+      limit?: number,
+      page?: number,
+    ): Promise<{ data: Category[]; total: number }> {
+      const query = this.categoryRepository.createQueryBuilder('category');
+  
+      if (title) {
+        query.where('category.title ILIKE :title', { title: `%${title}%` });
+      }
+  
+      if (limit) {
+        query.take(limit);
+      }
+  
+      if (page && limit) {
+        query.skip((page - 1) * limit);
+      }
+  
+      const [data, total] = await query.getManyAndCount();
+      return { data, total };
+    }
 
   async findById(id: string): Promise<Category | null> {
       return await this.categoryRepository.findOneBy({id})

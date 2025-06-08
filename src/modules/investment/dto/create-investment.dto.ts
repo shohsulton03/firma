@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsOptional, IsString, IsUUID } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsArray, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CreateInvestmentDto {
   @ApiProperty({
@@ -36,4 +37,28 @@ export class CreateInvestmentDto {
   })
   @IsOptional()
   files?: Express.Multer.File[];
+
+  @ApiProperty({
+    description: 'Yillik daromad foizda',
+    example: '8',
+  })
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  annualIncome: number;
+
+  @ApiProperty({
+    description: 'Invistitsiya mudati yilda',
+    example: '5',
+  })
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  investmentDuration: number;
+
+  @ApiProperty({
+    description: 'Minimal summa',
+    example: '35000',
+  })
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  minAmount: number;
 }

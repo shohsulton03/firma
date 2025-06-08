@@ -16,4 +16,13 @@ export class Investment extends BaseEntity {
   @ManyToOne(() => Category, (category) => category.investments)
   @JoinColumn({ name: 'category_id' })
   category: Category;
+
+  @Column({type:"decimal", name: "annual_ncome"})
+  annualIncome:number
+
+  @Column({type:"decimal", name: "investment_duration"})
+  investmentDuration:number
+
+  @Column({type:"decimal", name: "min_amount"})
+  minAmount:number
 }

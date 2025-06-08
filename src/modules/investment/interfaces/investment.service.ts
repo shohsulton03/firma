@@ -8,7 +8,22 @@ export interface IInvestmentService {
     dto: CreateInvestmentDto,
     files: Express.Multer.File[],
   ): Promise<ResData<Investment>>;
-  findAll(): Promise<ResData<Array<Investment>>>;
+  findAll(query: {
+    title?: string;
+    limit?: number;
+    page?: number;
+    categoryId? : string;
+  }): Promise<
+    ResData<{
+      items: Investment[];
+      meta: {
+        totalItems: number;
+        currentPage: number;
+        totalPages: number;
+        perPage: number;
+      };
+    }>
+  >;
   findOneById(id: string): Promise<ResData<Investment>>;
   update(
     id: string,

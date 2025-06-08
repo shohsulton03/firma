@@ -4,32 +4,59 @@ import { Repository } from "typeorm";
 import { IInvestmentRepository } from "./interfaces/investment.repository";
 
 export class InvestmentRepository implements IInvestmentRepository {
-    constructor(
-        @InjectRepository(Investment) private investmentRepository: Repository<Investment>,
-    ){}
+  constructor(
+    @InjectRepository(Investment)
+    private investmentRepository: Repository<Investment>,
+  ) {}
 
-    async create(dto: Investment): Promise<Investment> {
-        const data = await this.investmentRepository.save(dto);
-        return data;
+  async create(dto: Investment): Promise<Investment> {
+    const data = await this.investmentRepository.save(dto);
+    return data;
+  }
+
+  async findAll(
+    title?: string,
+    limit?: number,
+    page?: number,
+    categoryId?: string,
+  ): Promise<{ data: Investment[]; total: number }> {
+    const query = this.investmentRepository
+      .createQueryBuilder('investment')
+      .leftJoinAndSelect('investment.category', 'category');
+
+    if (title) {
+      query.andWhere('investment.title ILIKE :title', { title: `%${title}%` });
     }
 
-    async findAll(): Promise<Array<Investment>> {
-        return await this.investmentRepository.find()
+    if (categoryId) {
+      query.andWhere('investment.categoryId = :categoryId', { categoryId });
     }
 
-    async findById(id: string): Promise<Investment | null> {
-        return await this.investmentRepository.findOneBy({id})
+    if (limit) {
+      query.take(limit);
     }
 
-    async findByTitle(title: string): Promise<Investment | null> {
-        return await this.investmentRepository.findOneBy({title})
+    if (page && limit) {
+      query.skip((page - 1) * limit);
     }
 
-    async update(entity: Investment): Promise<Investment> {
-        return await this.investmentRepository.save(entity)
-    }
+    const [data, total] = await query.getManyAndCount();
+    return { data, total };
+  }
 
-    async delete(entity: Investment): Promise<Investment> {
-        return await this.investmentRepository.remove(entity)
-    }
+  async findById(id: string): Promise<Investment | null> {
+    return await this.investmentRepository.findOneBy({ id });
+  }
+
+  async findByTitle(title: string): Promise<Investment | null> {
+    return await this.investmentRepository.findOneBy({ title });
+  }
+
+  async update(entity: Investment): Promise<Investment> {
+    return await this.investmentRepository.save(entity);
+  }
+
+  async delete(entity: Investment): Promise<Investment> {
+    return await this.investmentRepository.remove(entity);
+  }
 }

@@ -13,11 +13,11 @@ export class CategoryService implements ICategoryService {
     @Inject('ICategoryRepository')
     private readonly categoryRepository: ICategoryRepository,
   ) {}
-  
+
   async create(dto: CreateCategoryDto): Promise<ResData<Category>> {
-    const foundData = await this.categoryRepository.findByTitle(dto.title)
-    if(foundData){
-      throw new CategoryAlreadyExistsException()
+    const foundData = await this.categoryRepository.findByTitle(dto.title);
+    if (foundData) {
+      throw new CategoryAlreadyExistsException();
     }
     const newCategory = new Category();
     Object.assign(newCategory, dto);
@@ -26,9 +26,33 @@ export class CategoryService implements ICategoryService {
     return new ResData<Category>('Category created successfully', 201, data);
   }
 
-  async findAll(): Promise<ResData<Array<Category>>> {
-    const data = await this.categoryRepository.findAll();
-    return new ResData<Array<Category>>('ok', 200, data);
+  async findAll(query: {
+    title?: string;
+    limit?: number;
+    page?: number;
+  }): Promise<ResData<any>> {
+    const { title, limit, page } = query;
+
+    const take = limit ? Number(limit) : undefined;
+    const skipPage = page ? Number(page) : 1;
+
+    const { data, total } = await this.categoryRepository.findAll(
+      title,
+      take,
+      skipPage,
+    );
+
+    const totalPages = take ? Math.ceil(total / take) : 1;
+
+    return new ResData<any>('ok', 200, {
+      items: data,
+      meta: {
+        totalItems: total,
+        currentPage: skipPage,
+        totalPages,
+        perPage: take ?? total,
+      },
+    });
   }
 
   async findOneById(id: string): Promise<ResData<Category>> {
@@ -63,6 +87,10 @@ export class CategoryService implements ICategoryService {
       throw new CategoryNotFoundException();
     }
     await this.categoryRepository.delete(foundData);
-    return new ResData<Category>('Category deleted successfully', 200, foundData);
+    return new ResData<Category>(
+      'Category deleted successfully',
+      200,
+      foundData,
+    );
   }
 }

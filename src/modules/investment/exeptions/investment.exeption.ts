@@ -14,6 +14,6 @@ export class FileIsMissinExeption extends HttpException {
 
 export class InvestmentAlreadyExistsExeption extends HttpException {
   constructor() {
-    super('File is missing', HttpStatus.CONFLICT);
+    super('Investment already exists', HttpStatus.CONFLICT);
   }
 }

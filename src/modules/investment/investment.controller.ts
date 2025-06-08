@@ -1,9 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Inject,
+  UseInterceptors,
+  UploadedFiles,
+  Query,
+} from '@nestjs/common';
 import { CreateInvestmentDto } from './dto/create-investment.dto';
 import { UpdateInvestmentDto } from './dto/update-investment.dto';
 import { IInvestmentService } from './interfaces/investment.service';
-import { ApiConsumes } from '@nestjs/swagger';
+import { ApiConsumes, ApiQuery } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { Auth } from '../../common/decorator/auth.decorator';
 
 @Controller('investment')
 export class InvestmentController {
@@ -12,6 +25,7 @@ export class InvestmentController {
     private readonly investmentService: IInvestmentService,
   ) {}
 
+  @Auth()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('files', 10))
   @Post()
@@ -22,9 +36,18 @@ export class InvestmentController {
     return this.investmentService.create(createInvestmentDto, files);
   }
 
+  @ApiQuery({ name: 'title', required: false, description: 'Search by title' })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'categoryId', required: false, description: 'Search by categoryId' })
   @Get()
-  findAll() {
-    return this.investmentService.findAll();
+  findAll(
+    @Query('title') title?: string,
+    @Query('limit') limit?: number,
+    @Query('page') page?: number,
+    @Query('categoryId') categoryId?: string,
+  ) {
+    return this.investmentService.findAll({ title, limit, page, categoryId });
   }
 
   @Get(':id')
@@ -32,6 +55,7 @@ export class InvestmentController {
     return this.investmentService.findOneById(id);
   }
 
+  @Auth()
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FilesInterceptor('files', 10))
   @Patch(':id')
@@ -43,6 +67,7 @@ export class InvestmentController {
     return this.investmentService.update(id, updateInvestmentDto, files);
   }
 
+  @Auth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.investmentService.delete(id);

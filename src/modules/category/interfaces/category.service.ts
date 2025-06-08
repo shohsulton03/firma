@@ -7,7 +7,17 @@ export interface ICategoryService {
   create(
     dto: CreateCategoryDto,
   ): Promise<ResData<Category>>;
-  findAll(): Promise<ResData<Array<Category>>>;
+  findAll(query: { title?: string; limit?: number; page?: number }): Promise<
+      ResData<{
+        items: Category[];
+        meta: {
+          totalItems: number;
+          currentPage: number;
+          totalPages: number;
+          perPage: number;
+        };
+      }>
+    >;
   findOneById(id: string): Promise<ResData<Category>>;
   update(
     id: string,
