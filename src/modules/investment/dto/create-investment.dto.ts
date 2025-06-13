@@ -1,6 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import { IsArray, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateInvestmentDto {
   @ApiProperty({
@@ -61,4 +67,22 @@ export class CreateInvestmentDto {
   @Transform(({ value }) => Number(value))
   @IsNumber()
   minAmount: number;
+
+  @ApiProperty({
+    description:
+      'Joyning geografik boylami (Longitude), -180 dan 180 gacha qiymat.',
+    example: 69.2401,
+  })
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  longitut: number;
+
+  @ApiProperty({
+    description:
+      'Joyning geografik enlami (Latitude), -90 dan 90 gacha qiymat.',
+    example: 41.2995,
+  })
+  @Transform(({ value }) => Number(value))
+  @IsNumber()
+  latitude: number;
 }

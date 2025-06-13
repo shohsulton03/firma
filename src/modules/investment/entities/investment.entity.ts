@@ -25,4 +25,10 @@ export class Investment extends BaseEntity {
 
   @Column({type:"decimal", name: "min_amount"})
   minAmount:number
+
+  @Column({type:"decimal", name: "longitut", nullable:true})
+  longitut:number
+
+  @Column({type:"decimal", name: "latitude", nullable:true})
+  latitude:number
 }

@@ -29,7 +29,7 @@ export class InvestmentRepository implements IInvestmentRepository {
     }
 
     if (categoryId) {
-      query.andWhere('investment.categoryId = :categoryId', { categoryId });
+      query.andWhere('category.id = :categoryId', { categoryId });
     }
 
     if (limit) {
