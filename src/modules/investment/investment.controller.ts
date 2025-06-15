@@ -27,7 +27,7 @@ export class InvestmentController {
 
   @Auth()
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FilesInterceptor('files', 10))
+  @UseInterceptors(FilesInterceptor('files', 10, {limits: { fileSize: 1 * 1024 * 1024 }}))
   @Post()
   create(
     @Body() createInvestmentDto: CreateInvestmentDto,
@@ -57,7 +57,7 @@ export class InvestmentController {
 
   @Auth()
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FilesInterceptor('files', 10))
+  @UseInterceptors(FilesInterceptor('files', 10,  {limits: { fileSize: 1 * 1024 * 1024 }}))
   @Patch(':id')
   update(
     @Param('id') id: string,

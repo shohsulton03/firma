@@ -15,7 +15,9 @@ export class BlogController {
 
   @Auth()
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: 1 * 1024 * 1024 } }),
+  )
   @Post()
   create(
     @Body() createBlogDto: CreateBlogDto,
@@ -43,7 +45,9 @@ export class BlogController {
 
   @Auth()
   @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', { limits: { fileSize: 1 * 1024 * 1024 } }),
+  )
   @Patch(':id')
   update(
     @Param('id') id: string,
