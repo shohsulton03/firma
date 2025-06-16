@@ -14,6 +14,7 @@ import { FileModule } from './modules/file/file.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { InvestmentModule } from './modules/investment/investment.module';
 import { CategoryModule } from './modules/category/category.module';
+import { ContactModule } from './modules/contact/contact.module';
 
 @Module({
   imports: [
@@ -53,7 +54,8 @@ import { CategoryModule } from './modules/category/category.module';
     FileModule,
     BlogModule,
     InvestmentModule,
-    CategoryModule
+    CategoryModule,
+    ContactModule
   ],
   providers: [JwtStrategy],
 })
