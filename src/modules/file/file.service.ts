@@ -28,7 +28,8 @@ export class FileService {
         );
       }
 
-      const fileName = file.originalname;
+      const fileExtension = mimeTypesMap[file.mimetype];
+      const fileName = uuid.v4() + fileExtension;
       const filePath = path.resolve(__dirname, '..', '..', '..', 'upload');
 
       if (!fs.existsSync(filePath)) {
