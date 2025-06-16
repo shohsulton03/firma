@@ -24,6 +24,8 @@ export class BlogRepository implements IBlogRepository {
       query.where('blog.title ILIKE :title', { title: `%${title}%` });
     }
 
+    query.orderBy('blog.createdAt', 'DESC');
+
     if (limit) {
       query.take(limit);
     }
