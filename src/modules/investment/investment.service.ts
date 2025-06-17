@@ -4,7 +4,6 @@ import { UpdateInvestmentDto } from './dto/update-investment.dto';
 import { IInvestmentService } from './interfaces/investment.service';
 import { FileService } from '../file/file.service';
 import { IInvestmentRepository } from './interfaces/investment.repository';
-import { ICategoryRepository } from '../category/interfaces/category.repository';
 import { ResData } from '../../common/lib/resData';
 import { Investment } from './entities/investment.entity';
 import * as path from 'node:path';
@@ -13,7 +12,6 @@ import {
   InvestmentAlreadyExistsExeption,
   InvestmentNotFoundExeption,
 } from './exeptions/investment.exeption';
-import { CategoryNotFoundException } from '../category/exeptions/category.exeption';
 
 @Injectable()
 export class InvestmentService implements IInvestmentService {
@@ -21,8 +19,6 @@ export class InvestmentService implements IInvestmentService {
     @Inject('IInvestmentRepository')
     private readonly investmentRepository: IInvestmentRepository,
     private readonly fileService: FileService,
-    @Inject('ICategoryRepository')
-    private readonly categoryRepository: ICategoryRepository,
   ) {}
 
   async create(
@@ -37,10 +33,6 @@ export class InvestmentService implements IInvestmentService {
     if (foundData) {
       throw new InvestmentAlreadyExistsExeption();
     }
-    const category = await this.categoryRepository.findById(dto.categoryId);
-    if (!category) {
-      throw new CategoryNotFoundException();
-    }
     const images = await Promise.all(
       files.map(async (file) => {
         const fileName = await this.fileService.saveFile(file);
@@ -51,7 +43,6 @@ export class InvestmentService implements IInvestmentService {
     const newInvestment = new Investment();
     Object.assign(newInvestment, dto);
     newInvestment.images = images;
-    newInvestment.category = category;
     const data = await this.investmentRepository.create(newInvestment);
     return new ResData<Investment>(
       'Investment created successfully',
@@ -107,15 +98,6 @@ export class InvestmentService implements IInvestmentService {
     const foundData = await this.investmentRepository.findById(id);
     if (!foundData) {
       throw new InvestmentNotFoundExeption();
-    }
-    if (dto.categoryId) {
-      const checkCategory = await this.categoryRepository.findById(
-        dto.categoryId,
-      );
-      if (!checkCategory) {
-        throw new CategoryNotFoundException();
-      }
-      foundData.category = checkCategory;
     }
     if (files) {
       foundData.images.forEach(async (image) => {

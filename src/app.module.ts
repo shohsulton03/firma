@@ -13,7 +13,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { FileModule } from './modules/file/file.module';
 import { BlogModule } from './modules/blog/blog.module';
 import { InvestmentModule } from './modules/investment/investment.module';
-import { CategoryModule } from './modules/category/category.module';
 import { ContactModule } from './modules/contact/contact.module';
 
 @Module({
@@ -54,7 +53,6 @@ import { ContactModule } from './modules/contact/contact.module';
     FileModule,
     BlogModule,
     InvestmentModule,
-    CategoryModule,
     ContactModule
   ],
   providers: [JwtStrategy],

@@ -5,7 +5,6 @@ import {
   IsNumber,
   IsOptional,
   IsString,
-  IsUUID,
 } from 'class-validator';
 
 export class CreateInvestmentDto {
@@ -28,11 +27,11 @@ export class CreateInvestmentDto {
   images: string[];
 
   @ApiProperty({
-    description: 'Category unique id (UUID)',
-    example: '550e8400-e29b-41d4-a716-446655440000',
+    description: 'Category name',
+    example: 'market',
   })
-  @IsUUID()
-  categoryId: string;
+  @IsString()
+  category: string;
 
   @ApiProperty({
     description: 'png, ppt, wbep formatdagi fayl',
