@@ -12,7 +12,6 @@ export interface IInvestmentService {
     title?: string;
     limit?: number;
     page?: number;
-    categoryId? : string;
   }): Promise<
     ResData<{
       items: Investment[];

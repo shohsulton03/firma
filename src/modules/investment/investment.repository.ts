@@ -18,18 +18,12 @@ export class InvestmentRepository implements IInvestmentRepository {
     title?: string,
     limit?: number,
     page?: number,
-    categoryId?: string,
   ): Promise<{ data: Investment[]; total: number }> {
     const query = this.investmentRepository
       .createQueryBuilder('investment')
-      .leftJoinAndSelect('investment.category', 'category');
 
     if (title) {
       query.andWhere('investment.title ILIKE :title', { title: `%${title}%` });
-    }
-
-    if (categoryId) {
-      query.andWhere('category.id = :categoryId', { categoryId });
     }
 
     if (limit) {

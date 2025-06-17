@@ -6,7 +6,6 @@ export interface IInvestmentRepository {
     title?: string,
     limit?: number,
     page?: number,
-    categoryId?: string,
   ): Promise<{ data: Investment[]; total: number }>;
   update(entity: Investment): Promise<Investment>;
   delete(entity: Investment): Promise<Investment>;

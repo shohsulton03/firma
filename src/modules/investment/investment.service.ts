@@ -55,9 +55,8 @@ export class InvestmentService implements IInvestmentService {
     title?: string;
     limit?: number;
     page?: number;
-    categoryId?: string;
   }): Promise<ResData<any>> {
-    const { title, limit, page, categoryId } = query;
+    const { title, limit, page } = query;
 
     const take = limit ? Number(limit) : undefined;
     const skipPage = page ? Number(page) : 1;
@@ -66,7 +65,6 @@ export class InvestmentService implements IInvestmentService {
       title,
       take,
       skipPage,
-      categoryId,
     );
 
     const totalPages = take ? Math.ceil(total / take) : 1;

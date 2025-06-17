@@ -39,15 +39,13 @@ export class InvestmentController {
   @ApiQuery({ name: 'title', required: false, description: 'Search by title' })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'page', required: false, type: Number })
-  @ApiQuery({ name: 'categoryId', required: false, description: 'Search by categoryId' })
   @Get()
   findAll(
     @Query('title') title?: string,
     @Query('limit') limit?: number,
     @Query('page') page?: number,
-    @Query('categoryId') categoryId?: string,
   ) {
-    return this.investmentService.findAll({ title, limit, page, categoryId });
+    return this.investmentService.findAll({ title, limit, page });
   }
 
   @Get(':id')
