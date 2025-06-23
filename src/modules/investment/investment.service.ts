@@ -97,7 +97,7 @@ export class InvestmentService implements IInvestmentService {
     if (!foundData) {
       throw new InvestmentNotFoundExeption();
     }
-    if (files) {
+    if (files && files.length > 0) {
       foundData.images.forEach(async (image) => {
         const fileName = path.basename(image);
         this.fileService.deleteFile(fileName);

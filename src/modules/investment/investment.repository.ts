@@ -26,6 +26,8 @@ export class InvestmentRepository implements IInvestmentRepository {
       query.andWhere('investment.title ILIKE :title', { title: `%${title}%` });
     }
 
+    query.orderBy('investment.createdAt', 'DESC');
+
     if (limit) {
       query.take(limit);
     }
